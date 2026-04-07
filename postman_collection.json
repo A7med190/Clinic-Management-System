@@ -1,0 +1,36 @@
+{
+  "info": {"name": "Clinic Management System API", "description": "Django REST API for Clinic Management", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost:8000/api/v1", "type": "string"},
+    {"key": "accessToken", "value": "", "type": "string"}
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {"name": "Register", "request": {"method": "POST", "url": "{{baseUrl}}/users/register/", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"email\": \"user@example.com\", \"password\": \"password123\", \"first_name\": \"John\", \"last_name\": \"Doe\"}"}}},
+        {"name": "Login", "request": {"method": "POST", "url": "{{baseUrl}}/auth/login/", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"email\": \"user@example.com\", \"password\": \"password123\"}"}}}
+      ]
+    },
+    {"name": "Patients", "item": [
+        {"name": "List Patients", "request": {"method": "GET", "url": "{{baseUrl}}/patients/", "header": [{"key": "Authorization", "value": "Bearer {{accessToken}}"}]}},
+        {"name": "Create Patient", "request": {"method": "POST", "url": "{{baseUrl}}/patients/", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{accessToken}}"}], "body": {"mode": "raw", "raw": "{\"first_name\": \"John\", \"last_name\": \"Doe\", \"email\": \"patient@example.com\", \"phone\": \"1234567890\", \"date_of_birth\": \"1990-01-01\"}"}}}
+    ]},
+    {"name": "Doctors", "item": [
+        {"name": "List Doctors", "request": {"method": "GET", "url": "{{baseUrl}}/doctors/", "header": [{"key": "Authorization", "value": "Bearer {{accessToken}}"}]}},
+        {"name": "Create Doctor", "request": {"method": "POST", "url": "{{baseUrl}}/doctors/", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{accessToken}}"}], "body": {"mode": "raw", "raw": "{\"first_name\": \"Dr\", \"last_name\": \"Smith\", \"license_number\": \"DR001\", \"specialization\": \"\"}"}}}
+    ]},
+    {"name": "Appointments", "item": [
+        {"name": "List Appointments", "request": {"method": "GET", "url": "{{baseUrl}}/appointments/", "header": [{"key": "Authorization", "value": "Bearer {{accessToken}}"}]}},
+        {"name": "Create Appointment", "request": {"method": "POST", "url": "{{baseUrl}}/appointments/", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{accessToken}}"}], "body": {"mode": "raw", "raw": "{\"patient\": \"\", \"doctor\": \"\", \"appointment_date\": \"2024-12-01T10:00:00Z\", \"notes\": \"Checkup\"}"}}}
+    ]},
+    {"name": "Medical Records", "item": [
+        {"name": "List Records", "request": {"method": "GET", "url": "{{baseUrl}}/medical_records/", "header": [{"key": "Authorization", "value": "Bearer {{accessToken}}"}]}},
+        {"name": "Create Record", "request": {"method": "POST", "url": "{{baseUrl}}/medical_records/", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{accessToken}}"}], "body": {"mode": "raw", "raw": "{\"patient\": \"\", \"diagnosis\": \"\", \"prescription\": \"\"}"}}}
+    ]},
+    {"name": "Billing", "item": [
+        {"name": "List Invoices", "request": {"method": "GET", "url": "{{baseUrl}}/billing/invoices/", "header": [{"key": "Authorization", "value": "Bearer {{accessToken}}"}]}},
+        {"name": "Create Invoice", "request": {"method": "POST", "url": "{{baseUrl}}/billing/invoices/", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{accessToken}}"}], "body": {"mode": "raw", "raw": "{\"patient\": \"\", \"amount\": 100.00, \"description\": \"Consultation\"}"}}}
+    ]}
+  ]
+}

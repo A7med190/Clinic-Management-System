@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: compose/local/django/Dockerfile
+    image: clinic_local_django
+    volumes:
+      - .:/app:cached
+    ports:
+      - "8000:8000"
+    env_file:
+      - .envs/.local/.django
+      - .envs/.local/.postgres
+    depends_on:
+      - postgres
+      - redis
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  postgres:
+    image: postgres:16-alpine
+    volumes:
+      - clinic_postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .envs/.local/.postgres
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  clinic_postgres_data:
