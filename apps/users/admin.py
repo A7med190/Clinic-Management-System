@@ -8,7 +8,7 @@ User = get_user_model()
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     list_display = ("email", "username", "first_name", "last_name", "role", "is_active", "date_joined")
-    list_filter = ("role", "is_active", "is_staff", "is_superuser", "date_joined")
+    list_filter = ("role", "is_active", "is_superuser", "date_joined")
     search_fields = ("email", "username", "first_name", "last_name")
     ordering = ("-date_joined",)
 

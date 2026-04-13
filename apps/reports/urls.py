@@ -5,6 +5,4 @@ from .views import ReportViewSet
 router = DefaultRouter()
 router.register('', ReportViewSet, basename='report')
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = []

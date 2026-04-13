@@ -6,4 +6,4 @@ router = DefaultRouter()
 router.register(r"", MedicineViewSet, basename="medicine")
 router.register(r"transactions", InventoryTransactionViewSet, basename="inventory-transaction")
 
-urlpatterns = router.urls
+urlpatterns = []

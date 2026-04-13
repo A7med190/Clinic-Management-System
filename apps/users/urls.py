@@ -14,13 +14,4 @@ from .views import (
 router = DefaultRouter()
 router.register(r"", UserViewSet, basename="user")
 
-urlpatterns = [
-    path("register/", RegisterView.as_view(), name="register"),
-    path("login/", CustomTokenObtainPairView.as_view(), name="login"),
-    path("token/refresh/", CustomTokenRefreshView.as_view(), name="token_refresh"),
-    path("token/blacklist/", TokenBlacklistView.as_view(), name="token_blacklist"),
-    path("me/", MeView.as_view(), name="me"),
-    path("change-password/", ChangePasswordView.as_view(), name="change_password"),
-]
-
-urlpatterns += router.urls
+urlpatterns = []

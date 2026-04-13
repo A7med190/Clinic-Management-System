@@ -5,4 +5,4 @@ from .views import MedicalRecordViewSet
 router = DefaultRouter()
 router.register(r"", MedicalRecordViewSet, basename="medicalrecord")
 
-urlpatterns = router.urls
+urlpatterns = []

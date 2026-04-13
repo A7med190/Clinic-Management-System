@@ -198,8 +198,8 @@ class Report(models.Model):
         transaction_stats = {
             "total_transactions": transactions.count(),
             "adjustments": transactions.filter(transaction_type="adjustment").count(),
-            "purchases": transactions.filter(transaction_type="purchase").count(),
-            "dispensed": transactions.filter(transaction_type="dispensed").count(),
+            "stock_in": transactions.filter(transaction_type="in").count(),
+            "stock_out": transactions.filter(transaction_type="out").count(),
         }
 
         return {

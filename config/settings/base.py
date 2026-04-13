@@ -31,6 +31,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "drf_spectacular",
     "django_celery_beat",
+    "channels",
 ]
 
 LOCAL_APPS = [
@@ -48,6 +49,10 @@ LOCAL_APPS = [
     "apps.notifications",
     "apps.reports",
     "apps.specializations",
+    "apps.signals",
+    "apps.outbox",
+    "apps.webhooks",
+    "apps.websockets",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -62,6 +67,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "core.idempotency.IdempotencyMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -87,14 +93,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 # ─── Database ──────────────────────────────────────────────────
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_DB"),
-        "USER": config("POSTGRES_USER"),
-        "PASSWORD": config("POSTGRES_PASSWORD"),
-        "HOST": config("POSTGRES_HOST"),
-        "PORT": config("POSTGRES_PORT", default="5432"),
-        "CONN_MAX_AGE": 60,
-        "ATOMIC_REQUESTS": False,
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -232,3 +232,60 @@ LOGGING = {
         },
     },
 }
+
+# ─── Channels (WebSockets) ───────────────────────────────────────
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [config("REDIS_URL", default="redis://localhost:6379/1")],
+            "capacity": 1500,
+            "expiry": 10,
+        },
+    },
+}
+
+ASGI_APPLICATION = "config.asgi.application"
+
+# ─── Celery Beat Schedule ────────────────────────────────────────
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+# ─── Health Check ────────────────────────────────────────────────
+HEALTH_CHECK = {
+    "DISK_USAGE_MAX": 90,
+    "MEMORY_MIN": 100,
+}
+
+# ─── Circuit Breaker ─────────────────────────────────────────────
+CIRCUIT_BREAKER = {
+    "FAILURE_THRESHOLD": 5,
+    "RECOVERY_TIMEOUT": 60,
+    "EXPECTED_EXCEPTIONS": [
+        "requests.exceptions.RequestException",
+        "urllib3.exceptions.HTTPError",
+    ],
+}
+
+# ─── Idempotency ─────────────────────────────────────────────────
+IDEMPOTENCY_HEADER = "HTTP_X_IDEMPOTENCY_KEY"
+IDEMPOTENCY_CACHE_PREFIX = "idempotency:"
+IDEMPOTENCY_CACHE_TIMEOUT = 86400
+
+# ─── Webhook Settings ─────────────────────────────────────────────
+WEBHOOK_DELIVERY_TIMEOUT = 30
+WEBHOOK_MAX_RETRIES = 3
+WEBHOOK_RETRY_DELAYS = [60, 300, 900]
+
+# ─── Outbox Settings ─────────────────────────────────────────────
+OUTBOX_PROCESSOR_BATCH_SIZE = 100
+OUTBOX_PROCESSOR_INTERVAL = 5
+
+# ─── SSE Settings ─────────────────────────────────────────────────
+SSE_HEARTBEAT_INTERVAL = 30
+SSE_RETRY_TIME = 5000
+
+# ─── Graceful Shutdown ────────────────────────────────────────────
+GRACEFUL_SHUTDOWN_TIMEOUT = 30

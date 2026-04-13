@@ -5,4 +5,4 @@ from .views import ServiceViewSet
 router = DefaultRouter()
 router.register(r"", ServiceViewSet, basename="service")
 
-urlpatterns = router.urls
+urlpatterns = []

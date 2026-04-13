@@ -5,4 +5,4 @@ from .views import SpecializationViewSet
 router = DefaultRouter()
 router.register(r"", SpecializationViewSet, basename="specialization")
 
-urlpatterns = router.urls
+urlpatterns = []

@@ -7,6 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django.utils import timezone
 from django.db.models import F
+from django.db import models
 from .models import Medicine, InventoryTransaction
 from .serializers import MedicineSerializer, InventoryTransactionSerializer
 
